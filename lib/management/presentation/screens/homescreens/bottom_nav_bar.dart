@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:takatof/core/colors/colors.dart';
 import 'package:takatof/core/images/app_images.dart';
 import 'package:takatof/core/ui/app_ui.dart';
+import 'package:takatof/core/utils/app_constance.dart';
 import 'package:takatof/management/presentation/component/my_app_bar.dart';
+import 'package:takatof/management/presentation/screens/homescreens/new_task_list_screen.dart';
 import 'package:takatof/management/presentation/screens/homescreens/posts_screen.dart';
 import 'package:takatof/management/presentation/screens/homescreens/profile_screen.dart';
 
@@ -21,7 +23,8 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State {
   Widget? _child;
-  RxInt selectedScreen = 1.obs;
+  RxInt selectedScreen = 2.obs;
+  String title = 'الواجهة الرئيسية';
 
   @override
   void initState() {
@@ -35,7 +38,7 @@ class _BottomNavBarState extends State {
         backgroundColor: Color(0xFF75B7E1),
         extendBody: true,
         drawer: AppUi.drawer(),
-        appBar: MyAppBar.mine(),
+        appBar: MyAppBar.mine(title: title),
         body: _child,
         bottomNavigationBar: Directionality(
           textDirection: TextDirection.ltr,
@@ -60,30 +63,38 @@ class _BottomNavBarState extends State {
                     extras: {"label": "home"}),
                 FluidNavBarIcon(
                   // icon: Icons.home,
-                    svgPath: AppImages.home,
+                  //   svgPath: AppImages.,
+                  icon:Icons.event_available_outlined,
                     selectedForegroundColor: Colors.white,
                     unselectedForegroundColor: ColorResources.grey,
                     backgroundColor: selectedScreen.value == 1 ?ColorResources.redPrimary:Colors.white,
+                    extras: {"label": "tasks"}),
+                FluidNavBarIcon(
+                  // icon: Icons.home,
+                    svgPath: AppImages.home,
+                    selectedForegroundColor: Colors.white,
+                    unselectedForegroundColor: ColorResources.grey,
+                    backgroundColor: selectedScreen.value == 2 ?ColorResources.redPrimary:Colors.white,
                     extras: {"label": "home"}),
                 FluidNavBarIcon(
                   // icon: Icons.shutter_speed_sharp,
                     svgPath: AppImages.ads,
                     selectedForegroundColor: Colors.white,
                     unselectedForegroundColor: ColorResources.grey,
-                    backgroundColor: selectedScreen.value == 2 ?ColorResources.redPrimary:Colors.white,
+                    backgroundColor: selectedScreen.value == 3 ?ColorResources.redPrimary:Colors.white,
                     extras: {"label": "ads"}),
                 FluidNavBarIcon(
                   // icon: Icons.note,
                     svgPath: AppImages.posts,
                     selectedForegroundColor: Colors.white,
                     unselectedForegroundColor: ColorResources.grey,
-                    backgroundColor: selectedScreen.value == 3 ?ColorResources.redPrimary:Colors.white,
+                    backgroundColor: selectedScreen.value == 4 ?ColorResources.redPrimary:Colors.white,
                     extras: {"label": "home"}),
               ],
               onChange: _handleNavigationChange,
-              style: FluidNavBarStyle(iconUnselectedForegroundColor: Colors.white),
+              style:const FluidNavBarStyle(iconUnselectedForegroundColor: Colors.white),
               scaleFactor: 1.5,
-              defaultIndex: 1,
+              defaultIndex: selectedScreen.value,
               itemBuilder: (icon, item) => Semantics(
                 label: icon.extras!["label"],
                 child: item,
@@ -99,17 +110,24 @@ class _BottomNavBarState extends State {
       selectedScreen.value = index;
       switch (index) {
         case 0:
-          _child =const ProfileScreen();
+          title = 'الملف الشخصي';
+          _child = ProfileScreen(id: AppConstance.id,);
           break;
         case 1:
-          _child = HomeScreen();
+          title = 'المهام الجديدة';
+          _child = NewTaskListScreen();
           break;
         case 2:
-          _child =const AdsScreen();
+          title = 'الواجهة الرئيسية';
+          _child = HomeScreen();
           break;
         case 3:
-          _child =const PostsScreen();
+          title = 'الإعلانات';
+          _child =const AdsScreen();
           break;
+        case 4:
+          title = 'المنشورات';
+          _child =const PostsScreen();
       }
       _child = AnimatedSwitcher(
         switchInCurve: Curves.easeOut,

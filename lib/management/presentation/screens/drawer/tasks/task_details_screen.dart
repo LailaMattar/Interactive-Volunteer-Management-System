@@ -1,6 +1,6 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:takatof/core/colors/colors.dart';
 import 'package:takatof/core/error/app_error_widget.dart';
 import 'package:takatof/core/services/services_locator.dart';
@@ -8,10 +8,7 @@ import 'package:takatof/core/strings/app_strings.dart';
 import 'package:takatof/core/ui/app_buttons.dart';
 import 'package:takatof/core/ui/app_ui.dart';
 import 'package:takatof/core/utils/enums.dart';
-import 'package:takatof/management/data/datasource/task_remote_datasource.dart';
-import 'package:takatof/management/data/repositories/task_repository.dart';
 import 'package:takatof/management/domain/entities/task.dart';
-import 'package:takatof/management/domain/repositories/base_task_repository.dart';
 import 'package:takatof/management/domain/usecases/accept_task_usecase.dart';
 import 'package:takatof/management/domain/usecases/reject_task_usecase.dart';
 import 'package:takatof/management/presentation/component/my_app_bar.dart';
@@ -29,13 +26,13 @@ class TaskDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller = Get.put(TaskProcessingController(
-        acceptTaskUseCase: sl<AcceptTaskUseCase>(),
+        acceptTaskUseCase: sl<RegisterToTaskUseCase>(),
         rejectTaskUseCase: sl<RejectTaskUseCase>(),
         taskProcessingState:
             const TaskProcessingState(
                 taskProcessingState: RequestState.wait
             ).obs,
-        taskId: task.id));
+        taskId: task));
 
     return Scaffold(
       appBar: MyAppBar.titledAppBar(title: AppStrings.taskDetails),
@@ -92,8 +89,8 @@ class TaskDetailsScreen extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              '50 نقطة',
-                              style: TextStyle(
+                              '${task.numberPoint} نقطة',
+                              style:const TextStyle(
                                   color: ColorResources.black, fontSize: 15),
                             ),
                           ),
@@ -137,10 +134,12 @@ class TaskDetailsScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: AppButtons.mainButton(
-                          title: 'قبول',
-                          color: ColorResources.greenPrimary,
+                          title: task.isRegistered == 0?'تقديم':'تم التقديم',
+                          color: task.isRegistered == 0 ?ColorResources.greenPrimary:ColorResources.grey,
                           onTap: () {
-                            controller.acceptTask();
+                            if(task.isRegistered == 0) {
+                              controller.acceptTask();
+                            }
                           },
                         ),
                       ),
@@ -148,13 +147,34 @@ class TaskDetailsScreen extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
+                        child: Container(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: task.state == '2',
+                child: SizedBox(
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Expanded(
                         child: AppButtons.mainButton(
-                          title: 'رفض',
-                          color: ColorResources.redPrimary,
+                          title: task.isFinish == 0?'طلب انهاء':'تم تقديم الطلب',
+                          color: task.isFinish == 0 ?ColorResources.greenPrimary:ColorResources.grey,
                           onTap: () {
-                            controller.rejectTask();
+                            if(task.isFinish == 0) {
+                              controller.rejectTask();
+                            }
                           },
                         ),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: Container(),
                       ),
                     ],
                   ),
@@ -172,8 +192,19 @@ class TaskDetailsScreen extends StatelessWidget {
                         return Container();
                       case RequestState.loaded:
                         WidgetsBinding.instance.addPostFrameCallback((_){
-                          AppUi.showToast(message: 'تم ارسال الطلب بنجاح');
-                          Get.offAll(()=> BottomNavBar());
+                          // AppUi.showToast(message: controller.taskProcessingState.value.taskProcessingResponse);
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.success,
+                            text: controller.taskProcessingState.value.taskProcessingResponse,
+                            confirmBtnColor: ColorResources.greenPrimary,
+                            onConfirmBtnTap: (){
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Get.offAll(()=> BottomNavBar());
+                            },
+                            barrierDismissible: false,
+                            confirmBtnText: 'حسناً',
+                          );
                         });
                         return Container();
                     }

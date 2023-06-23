@@ -31,7 +31,7 @@ class TasksListScreen extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar.titledAppBar(title: AppStrings.tasksList),
       body: DefaultTabController(
-        length: 3,
+        length: 2,
         child: Obx(
           () {
             switch (controller.state.value.tasksState) {
@@ -64,9 +64,6 @@ class TasksListScreen extends StatelessWidget {
                           unselectedLabelColor: ColorResources.black,
                           tabs: const [
                             Tab(
-                              text: 'المهمات المطلوبة',
-                            ),
-                            Tab(
                               text: 'قيد التنفيذ',
                             ),
                             Tab(
@@ -78,9 +75,6 @@ class TasksListScreen extends StatelessWidget {
                       Expanded(
                           child: TabBarView(
                         children: [
-                          TasksTab(
-                            tasks: controller.state.value.tasks,
-                          ),
                           TasksTab(
                             tasks: controller.state.value.inProgressTasks,
                           ),

@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:takatof/core/colors/colors.dart';
 import 'package:takatof/core/images/app_images.dart';
 
 class ProfileImage extends StatelessWidget {
@@ -9,7 +14,8 @@ class ProfileImage extends StatelessWidget {
     required this.image,
     required this.hasFrame,
     required this.diff,
-    this.frame
+    this.frame,
+    required this.file,
   }) : super(key: key);
   final double width;
   final double height;
@@ -17,6 +23,7 @@ class ProfileImage extends StatelessWidget {
   final bool hasFrame;
   final double diff;
   String? frame;
+  Rx<File> file;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +35,8 @@ class ProfileImage extends StatelessWidget {
           Visibility(
             visible: hasFrame,
             child: Container(
-              height: height,
-              width: width,
+              // height: height,
+              // width: width,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
@@ -40,18 +47,54 @@ class ProfileImage extends StatelessWidget {
               ),
             ),
           ),
-          Center(
+          file.value.path == ''?
+          image == '' || image == null
+              ?Center(
             child: Container(
               height: height,
               width: width-diff,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: DecorationImage(
+                  border: Border.all(color: ColorResources.grey),
+                  image:const DecorationImage(
                       image: AssetImage(
-                          image,
+                        AppImages.userTest,
                       ),
                     fit: BoxFit.contain
                   )
+              ),
+            ),
+          )
+              :Center(
+            child: Container(
+              height: height,
+              width: width-diff,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: ColorResources.grey),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                        image,
+                      ),
+                      fit: BoxFit.contain
+                  )
+              ),
+            ),
+          ):Obx(
+            ()=> Center(
+              child: Container(
+                height: height,
+                width: width-diff,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: ColorResources.grey),
+                    image: DecorationImage(
+                        image: FileImage(
+                          file!.value,
+                        ),
+                        fit: BoxFit.contain
+                    )
+                ),
               ),
             ),
           ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:takatof/core/network/api_constance.dart';
 import 'package:takatof/core/utils/enums.dart';
-import 'package:takatof/management/domain/entities/volunteer.dart';
+import 'package:takatof/management/domain/entities/auth.dart';
 import 'package:takatof/management/domain/usecases/login_usecase.dart';
 import 'package:takatof/management/presentation/controllers/login_state.dart';
 
@@ -11,7 +11,7 @@ class LoginController extends GetxController implements Equatable{
 
   final LoginUseCase loginUseCase;
   Rx<LoginState> loginState;
-  late Volunteer volunteer;
+  late Auth volunteer;
 
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -25,7 +25,7 @@ class LoginController extends GetxController implements Equatable{
     loginState.value=const LoginState(
         loginState: RequestState.loading,
     );
-    volunteer = Volunteer(email: email.text, password: password.text);
+    volunteer = Auth(email: email.text, password: password.text);
     try {
       final result = await loginUseCase(volunteer);
 

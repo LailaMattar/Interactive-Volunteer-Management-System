@@ -7,7 +7,8 @@ import 'package:takatof/management/data/models/task_model.dart';
 
 abstract class BaseTaskRemoteDataSource{
   Future<List<MyTaskModel>> getMyTasks();
-  Future<String> acceptTask(int taskId);
+  Future<List<MyTaskModel>> getNewTasks();
+  Future<String> registerToTask(int taskId);
   Future<String> rejectTask(int taskId);
 }
 
@@ -67,14 +68,15 @@ class TaskRemoteDataSource extends BaseTaskRemoteDataSource{
   }
 
   @override
-  Future<String> acceptTask(int taskId) async{
+  Future<String> registerToTask(int taskId) async{
     try {
-      print(ApiConstance.url(endPoint: ApiConstance.acceptTask));
+      print(ApiConstance.url(endPoint: ApiConstance.registerToTask));
       print('token is ${ApiConstance.token}');
+      print('id task $taskId');
       final response = await Dio().post(
-          ApiConstance.url(endPoint: ApiConstance.acceptTask),
+          ApiConstance.url(endPoint: ApiConstance.registerToTask),
           queryParameters: {
-            'id_request':taskId,
+            'id_task':taskId,
           },
           options: Options(
               headers: {
@@ -158,6 +160,60 @@ class TaskRemoteDataSource extends BaseTaskRemoteDataSource{
     }on DioError catch(e){
       print("error accept task response ${e.response!.data}");
       print("error accept task response ${e.response!.statusCode}");
+      throw ServerException(
+          errorModel: ErrorModel(
+              statusMessage: "${e.response!.data} ${e.response!.statusCode}",
+              statusCode: 0,
+              success: false
+          )
+      );
+    }catch(e){
+      String error = e.toString();
+      throw ServerException(
+          errorModel: ErrorModel(
+              statusMessage: error,
+              statusCode: 0,
+              success: false
+          )
+      );
+    }
+  }
+
+  @override
+  Future<List<MyTaskModel>> getNewTasks() async{
+    try {
+      print(ApiConstance.url(endPoint: ApiConstance.newTasksPath));
+      print('token is ${ApiConstance.token}');
+      final response = await Dio().get(
+          ApiConstance.url(endPoint: ApiConstance.newTasksPath),
+          options: Options(
+              headers: {
+                'Authorization':ApiConstance.token,
+                "Accept": "application/json",
+                'Content-type': 'application/json'
+              },
+              validateStatus: (status){
+                return status == 404 || status == 401 || status == 200;
+              }
+          )
+      );
+      debugPrint('my tasks response ${response.data.toString()}');
+      if (response.statusCode == 200) {
+        return List<MyTaskModel>.from(
+            (response.data as List).map((object) =>
+                MyTaskModel.fromJson(object)));
+      } else {
+        throw ServerException(
+            errorModel: ErrorModel(
+                statusMessage: response.data['message'],
+                success: false,
+                statusCode: response.statusCode!
+            )
+        );
+      }
+    }on DioError catch(e){
+      print("error events response ${e.response!.data}");
+      print("error events response ${e.response!.statusCode}");
       throw ServerException(
           errorModel: ErrorModel(
               statusMessage: "${e.response!.data} ${e.response!.statusCode}",

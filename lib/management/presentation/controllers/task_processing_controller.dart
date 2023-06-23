@@ -4,16 +4,17 @@ import 'package:get/get.dart';
 import 'package:takatof/core/colors/colors.dart';
 import 'package:takatof/core/strings/app_strings.dart';
 import 'package:takatof/core/utils/enums.dart';
+import 'package:takatof/management/domain/entities/task.dart';
 import 'package:takatof/management/domain/usecases/accept_task_usecase.dart';
 import 'package:takatof/management/domain/usecases/reject_task_usecase.dart';
 import 'package:takatof/management/presentation/controllers/task_processing_state.dart';
 import 'package:takatof/management/presentation/screens/homescreens/bottom_nav_bar.dart';
 
 class TaskProcessingController extends GetxController implements Equatable {
-  final AcceptTaskUseCase acceptTaskUseCase;
+  final RegisterToTaskUseCase acceptTaskUseCase;
   final RejectTaskUseCase rejectTaskUseCase;
   final Rx<TaskProcessingState> taskProcessingState;
-  final int taskId;
+  final MyTask taskId;
 
   TaskProcessingController({
     required this.acceptTaskUseCase,
@@ -25,7 +26,7 @@ class TaskProcessingController extends GetxController implements Equatable {
   acceptTask() async {
     taskProcessingState.value = taskProcessingState.value
         .copyWith(taskProcessingState: RequestState.loading);
-    final result = await acceptTaskUseCase(taskId);
+    final result = await acceptTaskUseCase(taskId.id);
 
     result.fold(
         (l) => taskProcessingState.value = taskProcessingState.value.copyWith(
@@ -42,7 +43,7 @@ class TaskProcessingController extends GetxController implements Equatable {
   rejectTask()async{
     taskProcessingState.value = taskProcessingState.value
         .copyWith(taskProcessingState: RequestState.loading);
-    final result = await rejectTaskUseCase(taskId);
+    final result = await rejectTaskUseCase(taskId.idRequest);
 
     result.fold(
             (l) => taskProcessingState.value = taskProcessingState.value.copyWith(

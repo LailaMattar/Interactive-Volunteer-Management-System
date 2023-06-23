@@ -22,9 +22,9 @@ class TaskRepository extends BaseTaskRepository{
   }
 
   @override
-  Future<Either<Failure, String>> acceptTask(int parameters) async{
+  Future<Either<Failure, String>> registerToTask(int parameters) async{
     try{
-      final result =await baseTaskRemoteDataSource.acceptTask(parameters);
+      final result =await baseTaskRemoteDataSource.registerToTask(parameters);
       return Right(result);
     }on ServerException catch (failure){
       print("exception accept task");
@@ -39,6 +39,17 @@ class TaskRepository extends BaseTaskRepository{
       return Right(result);
     }on ServerException catch (failure){
       print("exception reject task");
+      return Left(ServerFailure(message: failure.errorModel.statusMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<MyTask>>> getNewTasks() async{
+    try{
+      final result =await baseTaskRemoteDataSource.getNewTasks();
+      return Right(result);
+    }on ServerException catch (failure){
+      print("exception new tasks");
       return Left(ServerFailure(message: failure.errorModel.statusMessage));
     }
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:takatof/core/colors/colors.dart';
 import 'package:takatof/core/error/app_error_widget.dart';
+import 'package:takatof/core/services/services_locator.dart';
 import 'package:takatof/core/strings/app_strings.dart';
 import 'package:takatof/core/ui/app_ui.dart';
 import 'package:takatof/core/utils/enums.dart';
@@ -18,12 +19,6 @@ class MyEventsScreen extends StatelessWidget {
   MyEventsScreen({Key? key}) : super(key: key);
   late MyEventsController controller;
 
-  final List<Widget> screens = [
-    MyEventsTab(),
-    MyEventsTab(),
-    MyEventsTab(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     BaseManagementDataSource baseManagementDataSource = ManagementDataSource();
@@ -31,10 +26,12 @@ class MyEventsScreen extends StatelessWidget {
     GetMyEventUseCase getMyEventUseCase = GetMyEventUseCase(baseManagementRepository);
     controller = Get.put(MyEventsController(
         getMyEventUseCase: getMyEventUseCase,
+        getAdminEventUseCase: sl(),
         myEventState: const MyEventState(
             myEventsState: RequestState.loading
         ).obs
     ));
+    controller.getMyEvents();
     return Scaffold(
       appBar: MyAppBar.titledAppBar(title: AppStrings.myEvents),
       body: Obx(
@@ -85,7 +82,11 @@ class MyEventsScreen extends StatelessWidget {
                             ),
                             Expanded(
                                 child: TabBarView(
-                                  children: screens,
+                                  children: [
+                                    MyEventsTab(events: controller.myEventState.value.myEventsState1,isMyState:true,isAdminState:false),
+                                    MyEventsTab(events: controller.myEventState.value.myEventsState2,isMyState:true,isAdminState:false),
+                                    MyEventsTab(events: controller.myEventState.value.myEventsState3,isMyState:true,isAdminState:false),
+                                  ],
                                 ))
                           ],
                         ),

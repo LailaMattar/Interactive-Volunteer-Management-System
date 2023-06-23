@@ -24,7 +24,6 @@ import 'package:takatof/management/presentation/controllers/home_state.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
   late HomeController homeController;
-  List<Project> projects = [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +62,7 @@ class HomeScreen extends StatelessWidget {
                     case RequestState.loaded:
                       return ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 3,
+                        itemCount: homeController.homeState.value.projects.length,
                         itemBuilder: (BuildContext context, int index) {
                           Project project =
                               homeController.homeState.value.projects[index];
@@ -96,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                     return const Center(child: AppUi.spinkitMain);
                   case RequestState.loaded:
                     return ListView.builder(
-                      itemCount: 5,
+                      itemCount: homeController.homeState.value.events.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
@@ -104,6 +103,9 @@ class HomeScreen extends StatelessWidget {
                         return EventItem(
                           index: index,
                           event: event,
+                            isMyState:false,
+                            isAdminState:false,
+                          isAdmin:event.isAdmin==1,
                         );
                       },
                     );

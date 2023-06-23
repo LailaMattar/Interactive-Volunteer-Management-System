@@ -67,6 +67,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: TextFormField(
+                    textDirection: TextDirection.ltr,
                     controller: controller.email,
                     decoration:const InputDecoration(
                       hintText: AppStrings.email,
@@ -94,6 +95,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: TextFormField(
+                    textDirection: TextDirection.ltr,
                     controller: controller.password,
                     decoration:const InputDecoration(
                       hintText: AppStrings.password,
@@ -155,7 +157,6 @@ class LoginScreen extends StatelessWidget {
                 ),
                 Obx(
                       (){
-                        print('stateee : ${controller.loginState.value.loginState}');
                         switch(controller.loginState.value.loginState){
                           case RequestState.loading:
                             return const Center(child: AppUi.spinkitMain);
@@ -165,7 +166,6 @@ class LoginScreen extends StatelessWidget {
                               });
                               return Container();
                             case RequestState.error:
-                              print('error screen');
                               return AppErrorWidget.error(message: controller.loginState.value.loginMessage);
                             case RequestState.wait:
                               return Container();

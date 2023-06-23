@@ -20,7 +20,7 @@ class InitiativeItem extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: (){
-          Get.to(InitiativeDetailsScreen(index: index,initiative: initiative,));
+          Get.to(InitiativeDetailsScreen(index: index,initiative: initiative,isMyState:false));
         },
         child: Container(
           height: 110,

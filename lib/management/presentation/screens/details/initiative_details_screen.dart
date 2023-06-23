@@ -21,9 +21,11 @@ class InitiativeDetailsScreen extends StatelessWidget {
     Key? key,
     required this.index,
     required this.initiative,
+    required this.isMyState
   }) : super(key: key);
   final int index;
   final Initiative initiative;
+  final bool isMyState;
 
   late InitiativeController controller;
 
@@ -37,7 +39,7 @@ class InitiativeDetailsScreen extends StatelessWidget {
     controller.getInitiative(initiative.id);
     return Scaffold(
       drawer: AppUi.drawer(),
-      appBar: MyAppBar.mine(),
+      appBar: MyAppBar.titledAppBar(title: 'تفاصيل المبادرة'),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -196,7 +198,7 @@ class InitiativeDetailsScreen extends StatelessWidget {
                                 return Container();
                               case RequestState.loaded:
                                 return ListView.builder(
-                                  itemCount: 3,
+                                  itemCount: controller.initiativeState.value.initiative.events.length,
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (BuildContext context, int index) {
@@ -205,6 +207,9 @@ class InitiativeDetailsScreen extends StatelessWidget {
                                       index: index,
                                       event: event,
                                       initiative: initiative,
+                                      isMyState: isMyState,
+                                        isAdminState:false,
+                                      isAdmin:false,
                                     );
                                   },
                                 );

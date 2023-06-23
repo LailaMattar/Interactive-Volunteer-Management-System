@@ -21,7 +21,7 @@ class ProjectDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: ColorResources.white,
       drawer: AppUi.drawer(),
-      appBar: MyAppBar.mine(),
+      appBar: MyAppBar.titledAppBar(title: 'تفاصيل المشروع'),
       body: SingleChildScrollView(
         child: Column(
           children: [

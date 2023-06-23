@@ -5,8 +5,15 @@ import 'package:get/get.dart';
 import 'package:takatof/core/colors/colors.dart';
 import 'package:takatof/core/images/app_images.dart';
 import 'package:takatof/core/strings/app_strings.dart';
+import 'package:takatof/core/utils/app_constance.dart';
+import 'package:takatof/management/presentation/screens/drawer/registerrequests/register_requests_screen.dart';
+import 'package:takatof/management/presentation/screens/drawer/badges/badges_screen.dart';
+import 'package:takatof/management/presentation/screens/drawer/calander/calander_screen.dart';
+import 'package:takatof/management/presentation/screens/drawer/myevents/admin_events_screen.dart';
 import 'package:takatof/management/presentation/screens/drawer/myevents/my_events_screen.dart';
 import 'package:takatof/management/presentation/screens/drawer/tasks/tasks_list_screen.dart';
+import 'package:takatof/management/presentation/screens/drawer/virtualstore/vitual_store_screen.dart';
+import 'package:takatof/management/presentation/screens/drawer/qrscanner/qr_code_scanner_screen.dart';
 
 class AppUi{
   static const spinkitMain = SpinKitSpinningLines(
@@ -59,7 +66,7 @@ class AppUi{
       child: Column(
         children: [
           Container(
-              height: 250,
+              height: Get.height/3,
               width: double.infinity,
               decoration:const BoxDecoration(
                 color: ColorResources.white,
@@ -100,6 +107,114 @@ class AppUi{
             ),
             onTap: () {
               Get.to(()=> MyEventsScreen());
+            },
+          ),
+          Visibility(
+            visible: AppConstance.role == 'admin',
+            child: ListTile(
+              leading: const Icon(
+                Icons.event_available_outlined,
+                size: 30,
+                color: ColorResources.white,
+              ),
+              title: const Text(
+                'فعاليات المشرف',
+                style: TextStyle(
+                    color: ColorResources.white,
+                    fontSize: 18
+                ),
+              ),
+              onTap: () {
+                Get.to(()=> AdminEventsScreen());
+              },
+            ),
+          ),
+          Visibility(
+            visible: AppConstance.role == 'admin',
+            child: ListTile(
+              leading: const Icon(
+                Icons.app_registration,
+                size: 30,
+                color: ColorResources.white,
+              ),
+              title: const Text(
+                'طلبات الانضمام',
+                style: TextStyle(
+                    color: ColorResources.white,
+                    fontSize: 18
+                ),
+              ),
+              onTap: () {
+                Get.to(()=> RegisterRequestsScreen());
+              },
+            ),
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.badge,
+              size: 30,
+              color: ColorResources.white,
+            ),
+            title: const Text(
+              'الشارات',
+              style: TextStyle(
+                  color: ColorResources.white,
+                  fontSize: 18
+              ),
+            ),
+            onTap: () {
+              Get.to(()=>const BadgesScreen());
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.store,
+              size: 30,
+              color: ColorResources.white,
+            ),
+            title: const Text(
+              'المتجر الافتراضي',
+              style: TextStyle(
+                  color: ColorResources.white,
+                  fontSize: 18
+              ),
+            ),
+            onTap: () {
+              Get.to(()=>const VirtualStoreScreen());
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.qr_code_scanner,
+              size: 30,
+              color: ColorResources.white,
+            ),
+            title: const Text(
+              'تسجيل الحضور',
+              style: TextStyle(
+                  color: ColorResources.white,
+                  fontSize: 18
+              ),
+            ),
+            onTap: () {
+              Get.to(()=>const QRViewExample());
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.calendar_today,
+              size: 30,
+              color: ColorResources.white,
+            ),
+            title: const Text(
+              'روزناما',
+              style: TextStyle(
+                  color: ColorResources.white,
+                  fontSize: 18
+              ),
+            ),
+            onTap: () {
+              Get.to(()=> CalendarScreen());
             },
           ),
         ],

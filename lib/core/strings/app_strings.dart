@@ -21,7 +21,7 @@ class AppStrings{
   static const String initiativeName = 'اسم المبادرة';
   static const String eventDate = 'تاريخ المبادرة';
   static const String send = 'إرسال';
-  static const String tasksList = 'قائمة المهام';
+  static const String tasksList = 'قائمة مهامي';
   static const String taskDetails = 'تفاصيل المهمة';
   static const String error = 'يوجد مشكلة يرجى المحاولة لاحقاً';
   static const String retry = 'إعادة المحاولة';

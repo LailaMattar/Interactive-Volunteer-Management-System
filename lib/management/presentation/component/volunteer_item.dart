@@ -1,15 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:takatof/core/colors/colors.dart';
 import 'package:takatof/core/images/app_images.dart';
 import 'package:takatof/core/strings/app_strings.dart';
 import 'package:takatof/core/ui/app_buttons.dart';
+import 'package:takatof/management/domain/entities/event.dart';
+import 'package:takatof/management/domain/entities/volunteer.dart';
 import 'package:takatof/management/presentation/component/profile_image.dart';
 import 'package:takatof/management/presentation/screens/evaluation/evaluation_screen.dart';
 
 class VolunteerItem extends StatelessWidget {
-  const VolunteerItem({Key? key}) : super(key: key);
-
+  const VolunteerItem({
+    Key? key,
+    required this.volunteer,
+    required this.event,
+  }) : super(key: key);
+  final Volunteer volunteer;
+  final Event event;
+static bool isRate = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,16 +41,18 @@ class VolunteerItem extends StatelessWidget {
         child: Row(
           children: [
             ProfileImage(
-              height: double.infinity,
-              width: 75,
-              hasFrame: true,
-              image: AppImages.userTest,
-              frame: AppImages.frameTest,
-              diff: 30,
-            ),
+                height: double.infinity,
+                width: 75,
+                hasFrame: false,
+                image: AppImages.userTest,
+                frame: AppImages.frameTest,
+                diff: 30,
+                file:Rx<File>(File('')),
+              ),
+            // ),
             const SizedBox(width: 10,),
             Text(
-              'اسم المتطوع',
+              '${volunteer.name}',
               style: TextStyle(
                 color: ColorResources.black,
                 fontSize: 16,
@@ -51,15 +63,22 @@ class VolunteerItem extends StatelessWidget {
               child: Container(
               ),
             ),
-            AppButtons.buttonWithSpace(
-              onTap: (){
-                Get.to(()=> EvaluationScreen());
-              },
-              title: AppStrings.evaluation,
-              color: ColorResources.greenPrimary,
-              height: 40,
-              width: 60,
+            ElevatedButton(onPressed: volunteer.isEvaluation == 1 ? null : (){
+              Get.to(()=> EvaluationScreen(volunteer: volunteer,event: event,));
+            },
+              style: ElevatedButton.styleFrom(
+                backgroundColor:ColorResources.greenPrimary,
+              ), child: Text(volunteer.isEvaluation == 1?'تم التقييم':AppStrings.evaluation),
             ),
+            // AppButtons.buttonWithSpace(
+            //   onTap:  (){
+            //     Get.to(()=> EvaluationScreen(volunteer: volunteer,event: event,));
+            //   },
+            //   title: AppStrings.evaluation,
+            //   color: ColorResources.greenPrimary,
+            //   height: 40,
+            //   width: 60,
+            // ),
             const SizedBox(width: 20,),
           ],
         ),

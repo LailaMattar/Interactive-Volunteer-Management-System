@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:takatof/core/colors/colors.dart';
+import 'package:takatof/core/network/api_constance.dart';
 import 'package:takatof/core/network/dio_helper.dart';
 import 'package:takatof/core/routes/app_pages.dart';
 import 'package:takatof/core/services/services_locator.dart';
@@ -29,6 +30,7 @@ void main() async{
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   final fcmToken = await FirebaseMessaging.instance.getToken();
+  ApiConstance.fcmToken = fcmToken.toString();
   print('fcmToken : ${fcmToken}');
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -43,15 +45,15 @@ void main() async{
     print('Got a message whilst in the foreground!');
 
     if (message.notification != null) {
-      final snackBar = SnackBar(
-        content: Text(message.notification?.title ?? '', maxLines: 2),
-      );
-      Get.snackbar(
-        message.notification!.title!,
-        message.notification!.body!,
-        duration: Duration(seconds: 3),
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // final snackBar = SnackBar(
+      //   content: Text(message.notification?.title ?? '', maxLines: 2),
+      // );
+      // Get.snackbar(
+      //   message.notification!.title!,
+      //   message.notification!.body!,
+      //   duration: Duration(seconds: 3),
+      //   snackPosition: SnackPosition.BOTTOM,
+      // );
       // ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   });
@@ -68,6 +70,7 @@ class MyApp extends StatelessWidget {
       getPages: AppPages.routes,
       fallbackLocale: const Locale('ar'),
       locale: const Locale('ar'),
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: ColorResources.white2,
         primaryColor: ColorResources.greenPrimary

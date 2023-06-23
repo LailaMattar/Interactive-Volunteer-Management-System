@@ -15,5 +15,12 @@ class AppImages{
   static const String test5 = "assets/images/png/test5.png";
   static const String test6 = "assets/images/png/test6.png";
   static const String frameTest = "assets/images/png/frame_test.png";
-  static const String userTest = "assets/images/png/test_user.png";
+  static const String userTest = "assets/images/png/test_user2.png";
+  static const String cart = "assets/images/png/cart.png";
+  static const String diamond = "assets/images/png/gems.png";
+  static const String badgeTest = "assets/images/png/badge.png";
+  static const String badgeTest2 = "assets/images/png/badge2.png";
+  static const String heartFill = "assets/images/png/heart_fill.png";
+  static const String heart = "assets/images/png/heart.png";
+  static const String lock = "assets/images/png/lock.png";
 }

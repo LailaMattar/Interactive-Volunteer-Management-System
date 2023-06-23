@@ -4,7 +4,15 @@ import 'package:takatof/management/domain/entities/event.dart';
 import 'package:takatof/management/presentation/component/event_item.dart';
 
 class MyEventsTab extends StatelessWidget {
-  const MyEventsTab({Key? key}) : super(key: key);
+  const MyEventsTab({
+    Key? key,
+    required this.events,
+    required this.isMyState,
+    required this.isAdminState
+  }) : super(key: key);
+  final List<Event> events;
+  final bool isMyState;
+  final bool isAdminState;
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +20,10 @@ class MyEventsTab extends StatelessWidget {
       height: double.infinity,
       width: double.infinity,
       child: ListView.builder(
-        itemCount: 4,
-        itemBuilder: (BuildContext context , int index){
-          Event event = Event(description: '',id: index, image: AppImages.test3, date: '', time: '', place: '', startRegisterDate: '', finishRegisterDate: '', numberVolunteer: 1, state: '2', noteAdmin: '', name: '', isRegistered: 1);
-          return EventItem(index: index, event: event);
+        itemCount: events.length,
+        itemBuilder: (BuildContext context, int index) {
+          Event event = events[index];
+          return EventItem(index: index, event: event,isMyState: isMyState,isAdminState:isAdminState,isAdmin: false,);
         },
       ),
     );

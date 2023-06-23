@@ -2,33 +2,37 @@ import 'package:equatable/equatable.dart';
 import 'package:takatof/core/utils/enums.dart';
 
 class EventProcessingState extends Equatable {
-  final String registerInEventResponse;
-  final RequestState registerInEventState;
-  final String registerInEventMessage;
+  final String eventProcessingResponse;
+  final RequestState eventProcessingState;
+  final RequestState commentState;
+  final String eventProcessingMessage;
 
   const EventProcessingState(
-      {this.registerInEventResponse = '',
-      this.registerInEventState = RequestState.wait,
-      this.registerInEventMessage = ''});
+      {this.eventProcessingResponse = '',
+      this.eventProcessingState = RequestState.wait,
+      this.commentState = RequestState.wait,
+      this.eventProcessingMessage = ''});
 
   EventProcessingState copyWith({
-    String? registerInEventResponse,
-    RequestState? registerInEventState,
-    String? registerInEventMessage,
+    String? eventProcessingResponse,
+    RequestState? eventProcessingState,
+    RequestState? commentState,
+    String? eventProcessingMessage,
   }) {
     return EventProcessingState(
-      registerInEventResponse:
-          registerInEventResponse ?? this.registerInEventResponse,
-      registerInEventState: registerInEventState ?? this.registerInEventState,
-      registerInEventMessage:
-          registerInEventMessage ?? this.registerInEventMessage,
+      eventProcessingResponse:
+      eventProcessingResponse ?? this.eventProcessingResponse,
+      eventProcessingState: eventProcessingState ?? this.eventProcessingState,
+      commentState: commentState ?? this.commentState,
+      eventProcessingMessage:
+      eventProcessingMessage ?? this.eventProcessingMessage,
     );
   }
 
   @override
   List<Object?> get props => [
-        registerInEventResponse,
-        registerInEventState,
-        registerInEventMessage,
+        eventProcessingResponse,
+        eventProcessingState,
+        eventProcessingMessage,
       ];
 }

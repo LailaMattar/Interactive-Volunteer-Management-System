@@ -11,14 +11,15 @@ class InitiativeModel extends Initiative {
     required super.events,
   });
 
-  factory InitiativeModel.fromJson(Map<String, dynamic> json) =>
-      InitiativeModel(
-          id: json['id'],
-          name: json['name'],
-          image: json['image'],
-          numberVolunteer: json['number_volunteer'],
-          description: json['description'],
-events: List<EventModel>.from((json['activities'] ?? [])
-.map((object) => EventModel.fromJsonInitiative(object))),
-);
+  factory InitiativeModel.fromJson(Map<String, dynamic> json) {
+    return InitiativeModel(
+      id: json['id'],
+      name: json['name'],
+      image: json['image'],
+      numberVolunteer: json['number_volunteer'],
+      description: json['description'],
+      events: List<EventModel>.from((json['activities'] ?? [])
+          .map((object) => EventModel.fromJsonInitiative(object))),
+    );
+  }
 }
